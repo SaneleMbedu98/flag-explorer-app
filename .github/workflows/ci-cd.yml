@@ -29,13 +29,9 @@ jobs:
         working-directory: ./backend
         run: npm run build
 
-      - name: Ensure dist directory exists
-        working-directory: ./backend
-        run: mkdir -p dist
-
       - name: Package backend
         if: success()
-        working-directory: ./backend/dist
+        working-directory: ./backend/build
         run: zip -r backend.zip .
 
   frontend:
