@@ -1,31 +1,41 @@
 const request = require('supertest');
 const app = require('../../app');
 const axios = require('axios');
+
 jest.mock('axios');
 
 describe('Country Routes', () => {
-  //Previous Implementation 
-  // test('GET /countries should return list of countries', async () => {
-  //   const mockCountries = [{ name: { common: 'France' }, flags: { png: 'france.png' } }];
-  //   axios.get.mockResolvedValue({ data: mockCountries });
+  
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-  //   const response = await request(app).get('/countries');
-  //   expect(response.status).toBe(200);
-  //   expect(response.body).toEqual([{ name: 'France', flag: 'france.png' }]);
-  // });
   test('GET /countries should return list of countries', async () => {
+    const mockCountries = [
+      {
+        name: { common: 'France' },
+        flags: { png: 'france.png' },
+        capital: ['Paris']
+      }
+    ];
+    axios.get.mockResolvedValue({ data: mockCountries });
+
     const response = await request(app).get('/countries');
     expect(response.status).toBe(200);
-    expect(response.body).toEqual([{ name: 'France', flag: 'france.png', capital: 'N/A' }]);
+    expect(response.body).toEqual([
+      { name: 'France', flag: 'france.png', capital: 'Paris' }
+    ]);
   });
 
   test('GET /countries/France should return country details', async () => {
-    const mockCountry = [{
-      name: { common: 'France' },
-      population: 67391582,
-      capital: ['Paris'],
-      flags: { png: 'france.png' }
-    }];
+    const mockCountry = [
+      {
+        name: { common: 'France' },
+        population: 67391582,
+        capital: ['Paris'],
+        flags: { png: 'france.png' }
+      }
+    ];
     axios.get.mockResolvedValue({ data: mockCountry });
 
     const response = await request(app).get('/countries/France');

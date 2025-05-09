@@ -11,9 +11,11 @@ class CountryModel {
         flag: country.flags.png
       }));
     } catch (error) {
-      throw new Error('Failed to fetch countries');
+      console.error('Error fetching countries:', error.message);
+      throw new Error(`Failed to fetch countries: ${error.message}`);
     }
   }
+
   
   async getCountryByName(name) {
     if (!name) throw new Error('Invalid country name');
