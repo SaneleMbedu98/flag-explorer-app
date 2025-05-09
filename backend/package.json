@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "jest --coverage",
-    "build": "echo 'No build step defined'" 
+    "build": "tsc"
   },
   "dependencies": {
     "axios": "^1.7.2",
