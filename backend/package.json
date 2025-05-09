@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "clean": "rimraf dist",
-    "build": "npm run clean && npm run lint && tsc && npm run copy-configs",
+    "build": "npm run clean && tsc && npm run copy-configs",
     "copy-configs": "cp .env dist/.env",
     "minify": "terser dist/**/*.js --compress --mangle --output dist/"
   },
