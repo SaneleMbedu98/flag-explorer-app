@@ -2,67 +2,85 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   backend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
 
-      - name: Install backend dependencies
-        working-directory: ./backend
+      - name: Install dependencies
         run: npm install
 
       - name: Run backend tests
-        working-directory: ./backend
         run: npm test
 
       - name: Build backend
-        working-directory: ./backend
-        run: npm run build
-      
-      - name: Copy environment configs (if exists)
-        working-directory: ./backend
-        run: test -f .env && cp .env dist/.env || echo ".env not found, skipping copy"
+        run: npm run build  # If applicable, e.g., TypeScript compilation
 
-
-      - name: Package backend
-        if: success()
+      - name: Package backend (Docker)
+        run: |
+          docker build -t flag-explorer-backend:latest .
+          docker save -o backend.tar flag-explorer-backend:latest
         working-directory: ./backend
-        run: zip -r backend.zip .
 
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-artifact
+          path: backend/backend.tar
 
   frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '16'
 
-      - name: Install frontend dependencies
-        working-directory: ./frontend
+      - name: Install dependencies
         run: npm install
 
       - name: Run frontend tests
-        working-directory: ./frontend
-        run: npm test -- --watchAll=false
+        run: npm test
 
       - name: Build frontend
-        working-directory: ./frontend
         run: npm run build
 
-      - name: Package frontend
-        if: success()
-        working-directory: ./frontend/build
-        run: zip -r frontend.zip .
+      - name: Package frontend (Zip)
+        run: zip -r frontend-build.zip build/
+        working-directory: ./frontend
+
+      - name: Package frontend (Docker)
+        run: |
+          docker build -t flag-explorer-frontend:latest .
+          docker save -o frontend.tar flag-explorer-frontend:latest
+        working-directory: ./frontend
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-artifact
+          path: |
+            frontend/frontend-build.zip
+            frontend/frontend.tar
