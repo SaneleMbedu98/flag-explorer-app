@@ -11,40 +11,52 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
       - name: Install backend dependencies
         working-directory: ./backend
         run: npm install
+
       - name: Run backend tests
         working-directory: ./backend
         run: npm test
+
       - name: Build backend
         working-directory: ./backend
-        run: npm run build || true
+        run: npm run build
+
       - name: Package backend
-        run: zip -r backend.zip ./
+        if: success()
+        run: zip -r backend.zip .
         working-directory: ./backend/dist
 
   frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
       - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm install
+
       - name: Run frontend tests
         working-directory: ./frontend
         run: npm test -- --watchAll=false
+
       - name: Build frontend
         working-directory: ./frontend
         run: npm run build
+
       - name: Package frontend
-        run: zip -r frontend.zip ./
-        working-directory: ./frontend/dist
+        if: success()
+        run: zip -r frontend.zip .
+        working-directory: ./frontend/build
