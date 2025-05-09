@@ -25,9 +25,10 @@ jobs:
         working-directory: ./backend
         run: npm test
 
-      - name: Build backend
+      - name: Minify backend output
         working-directory: ./backend
-        run: npm run build  # just echoes a message
+        run: npm run minify
+
 
       - name: Package backend
         if: success()
