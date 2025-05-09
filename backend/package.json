@@ -6,7 +6,6 @@
   "scripts": {
     "test": "jest",
     "clean": "rimraf dist",
-    "lint": "eslint src --ext .ts",
     "build": "npm run clean && npm run lint && tsc && npm run copy-configs",
     "copy-configs": "cp .env dist/.env",
     "minify": "terser dist/**/*.js --compress --mangle --output dist/"
