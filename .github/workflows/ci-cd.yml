@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-artifact
-          path: backend/backend.tar
+          path: backend.tar
 
   frontend:
     runs-on: ubuntu-latest
@@ -82,5 +82,5 @@ jobs:
         with:
           name: frontend-artifact
           path: |
-            frontend/frontend-build.zip
-            frontend/frontend.tar
+            frontend-build.zip
+            frontend.tar
