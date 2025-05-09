@@ -27,12 +27,13 @@ jobs:
 
       - name: Build backend
         working-directory: ./backend
-        run: npm run build
+        run: npm run build  # just echoes a message
 
       - name: Package backend
         if: success()
-        working-directory: ./backend/build
+        working-directory: ./backend
         run: zip -r backend.zip .
+
 
   frontend:
     runs-on: ubuntu-latest
