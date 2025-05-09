@@ -28,6 +28,11 @@ jobs:
       - name: Build backend
         working-directory: ./backend
         run: npm run build
+      
+      - name: Copy environment configs (if exists)
+        working-directory: ./backend
+        run: test -f .env && cp .env dist/.env || echo ".env not found, skipping copy"
+
 
       - name: Package backend
         if: success()
