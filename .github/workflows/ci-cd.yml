@@ -16,7 +16,7 @@ jobs:
         working-directory: ./backend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -30,7 +30,13 @@ jobs:
         run: npm test
 
       - name: Build backend
-        run: npm run build  # If applicable, e.g., TypeScript compilation
+        run: npm run build
+      
+      - name: Clear cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: force-clear-${{ github.run_id }}
 
       - name: Package backend (Docker)
         run: |
@@ -51,7 +57,7 @@ jobs:
         working-directory: ./frontend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -70,6 +76,12 @@ jobs:
       - name: Package frontend (Zip)
         run: zip -r frontend-build.zip build/
         working-directory: ./frontend
+
+      - name: Clear cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: force-clear-${{ github.run_id }}
 
       - name: Package frontend (Docker)
         run: |
