@@ -4,6 +4,7 @@
   "description": "Backend for Flag Explorer App",
   "main": "app.js",
   "scripts": {
+    "test": "jest",
     "clean": "rimraf dist",
     "lint": "eslint src --ext .ts",
     "build": "npm run clean && npm run lint && tsc && npm run copy-configs",
