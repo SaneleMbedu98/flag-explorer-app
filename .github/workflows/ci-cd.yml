@@ -24,6 +24,9 @@ jobs:
       - name: Build backend
         working-directory: ./backend
         run: npm run build || true
+      - name: Package backend
+        run: zip -r backend.zip ./
+        working-directory: ./backend/dist
 
   frontend:
     runs-on: ubuntu-latest
@@ -42,3 +45,6 @@ jobs:
       - name: Build frontend
         working-directory: ./frontend
         run: npm run build
+      - name: Package frontend
+        run: zip -r frontend.zip ./
+        working-directory: ./frontend/dist
