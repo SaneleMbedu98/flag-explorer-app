@@ -20,12 +20,12 @@ describe('Country Routes', () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual(expect.arrayContaining([
       expect.objectContaining({
-        name: expect.any(String),
+        name: 'France',
         population: expect.any(Number),
-        capital: expect.any(String),
-        flag: expect.any(String),
-        languages: expect.any(String),
-        subregion: expect.any(String),
+        capital: 'Paris',
+        flag: expect.any(String), // Allow dynamic flag URLs
+        languages: expect.any(String), // Accept real API data
+        subregion: expect.any(String), // Handle actual subregion values
       })
     ]));
   }, 10000); // Extend timeout to 10 sec
