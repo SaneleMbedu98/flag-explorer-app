@@ -15,7 +15,7 @@ app.get('/', async (req, res) => {
     const countries = await CountryModel.getAllCountries();
     res.status(200).json(countries);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch country data' });
+    res.status(500).json({ error: 'Country not found' });
   }
 });
 

@@ -139,7 +139,7 @@ app.get('/', <span class="fstat-no" title="function not covered" >as</span>ync (
     const countries = <span class="cstat-no" title="statement not covered" >await CountryModel.getAllCountries();</span>
 <span class="cstat-no" title="statement not covered" >    res.status(200).json(countries);</span>
   } catch (error) {
-<span class="cstat-no" title="statement not covered" >    res.status(500).json({ error: 'Failed to fetch country data' });</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).json({ error: 'Country not found' });</span>
   }
 });
 &nbsp;
