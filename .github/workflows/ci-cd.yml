@@ -27,6 +27,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-cache-${{ github.run_id }}
+          restore-keys: |
+            npm-cache-
+
       - name: Install dependencies
         run: npm install
 
@@ -39,14 +47,6 @@ jobs:
         run: npm run build
         if: success()
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: npm-cache-${{ github.run_id }}
-          restore-keys: |
-            npm-cache-
-
       - name: Package backend (Docker)
         run: |
           docker build -t flag-explorer-backend:latest .
@@ -58,8 +58,9 @@ jobs:
         with:
           name: backend-artifact
           path: ./backend/backend.tar
-          retention-days: 7 # Retain artifacts longer for better rollback options
+          retention-days: 7
         if: success()
+
 
   frontend:
     runs-on: ubuntu-latest
