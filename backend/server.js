@@ -21,7 +21,6 @@
 //   console.log(`Server is running on http://localhost:${PORT}`);
 // });
 
-
 const express = require('express');
 const cors = require('cors');
 const countryRoutes = require('./routes/countryRoutes');
@@ -34,7 +33,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-// Root route - Returns all countries instead of a plain message
+// Root route - Returns all countries
 app.get('/', async (req, res) => {
   try {
     const countries = await CountryModel.getAllCountries();
@@ -54,9 +53,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Start the server inside the container
-app.listen(PORT, () => {
+// Start the server and export it for testing
+const server = app.listen(PORT, () => {
   console.log(`🚀 Server running inside Docker on port ${PORT}`);
 });
 
-module.exports = app;
+module.exports = { app, server };
+

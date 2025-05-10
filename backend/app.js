@@ -5,7 +5,10 @@ const CountryModel = require('./models/countryModel'); // Ensure this path is co
 
 const app = express();
 app.use(cors());
+
+// Routes
 app.use('/countries', countryRoutes);
+
 // Root Route - Returns all countries
 app.get('/', async (req, res) => {
   try {
@@ -16,16 +19,17 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Routes
-app.use('/countries', countryRoutes);
-
 // Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
+// Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
-module.exports = app;
+// Export both app and server for integration testing
+module.exports = { app, server };

@@ -24,7 +24,14 @@ describe('Country Controller', () => {
   });
 
   test('getCountryByName should return country details', async () => {
-    const country = { name: 'France', population: 67391582, capital: 'Paris', flag: 'france.png' };
+    const country = {
+      name: 'France',
+      population: 67391582,
+      capital: 'Paris',
+      flag: 'france.png',
+      languages: 'N/A',
+      subregion: 'Unknown',
+    };
     req.params = { name: 'France' };
     CountryModel.getCountryByName.mockResolvedValue(country);
 
@@ -39,6 +46,6 @@ describe('Country Controller', () => {
 
     await countryController.getCountryByName(req, res, next);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(response.body).toEqual({ error: 'Failed to fetch country data' });
+    expect(res.json).toHaveBeenCalledWith({ error: 'Failed to fetch country data' });
   });
 });
