@@ -13,7 +13,7 @@ function Details() {
       return;
     }
 
-    fetch(`http://localhost:3000/countries/${name}`)
+    fetch(`http://localhost:5000/countries/${name}`)
       .then(response => {
         if (!response.ok) throw new Error('Country not found');
         return response.json();
