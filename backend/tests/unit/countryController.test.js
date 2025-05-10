@@ -34,17 +34,17 @@ describe('Country Routes', () => {
   test('GET /countries/France should return country details', async () => {
     const response = await request(app).get('/countries/France');
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        name: 'France',
-        population: expect.any(Number),
-        capital: expect.any(String),
-        flag: expect.any(String),
-        languages: expect.any(String),
-        subregion: expect.any(String),
-      })
-    ]));
+    expect(response.body).toMatchObject({
+      name: 'France',
+      population: expect.any(Number),
+      capital: 'Paris',
+      flag: expect.any(String), // Accept dynamic flag URLs
+      languages: expect.any(String), // Accept real API language
+      region: expect.any(String), // Allow region if it's included
+      subregion: expect.any(String), // Prevent failure due to subregion changes
+    });
   });
+
 
   test('GET /countries/Invalid should return 404 for unknown country', async () => {
     const response = await request(app).get('/countries/Invalid');
