@@ -15,7 +15,7 @@ function Details() {
 
     fetch(`http://localhost:5000/countries/${name}`)
       .then(response => {
-        if (!response.ok) throw new Error('Country not found');
+        if (!response.ok) throw new Error('Failed to fetch country data');
         return response.json();
       })
       .then(data => setState({ country: data, loading: false, error: null }))

@@ -1,51 +1,52 @@
-const countryController = require('../../controllers/countryController');
-const CountryModel = require('../../models/countryModel');
-jest.mock('../../models/countryModel');
+const request = require('supertest');
+const mongoose = require('mongoose'); // Ensure it's imported for connection handling
+const { app, server } = require('../../app');
 
-describe('Country Controller', () => {
-  let req, res, next;
-
-  beforeEach(() => {
-    req = {};
-    res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn()
-    };
-    next = jest.fn();
+describe('Country Routes', () => {
+  afterAll(async () => {
+    // Close MongoDB connection if open
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.connection.close();
+    }
+    
+    // Ensure server is properly closed after tests
+    if (server && server.close) {
+      await new Promise(resolve => server.close(resolve));
+    }
   });
 
-  test('getAllCountries should return list of countries', async () => {
-    const countries = [{ name: 'France', flag: 'france.png' }];
-    CountryModel.getAllCountries.mockResolvedValue(countries);
+  test('GET /countries should return list of countries', async () => {
+    const response = await request(app).get('/countries');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        name: expect.any(String),
+        population: expect.any(Number),
+        capital: expect.any(String),
+        flag: expect.any(String),
+        languages: expect.any(String),
+        subregion: expect.any(String),
+      })
+    ]));
+  }, 10000); // Extend timeout to 10 sec
 
-    await countryController.getAllCountries(req, res, next);
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(countries);
-  });
 
-  test('getCountryByName should return country details', async () => {
-    const country = {
+  test('GET /countries/France should return country details', async () => {
+    const response = await request(app).get('/countries/France');
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
       name: 'France',
-      population: 67391582,
+      population: expect.any(Number),
       capital: 'Paris',
-      flag: 'france.png',
-      languages: 'N/A',
-      subregion: 'Unknown',
-    };
-    req.params = { name: 'France' };
-    CountryModel.getCountryByName.mockResolvedValue(country);
-
-    await countryController.getCountryByName(req, res, next);
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(country);
+      flag: expect.any(String),
+      languages: expect.any(String),
+      subregion: expect.any(String),
+    });
   });
 
-  test('getCountryByName should handle errors', async () => {
-    req.params = { name: 'Invalid' };
-    CountryModel.getCountryByName.mockRejectedValue(new Error('Country not found'));
-
-    await countryController.getCountryByName(req, res, next);
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Failed to fetch country data' });
+  test('GET /countries/Invalid should return 404 for unknown country', async () => {
+    const response = await request(app).get('/countries/Invalid');
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: 'Failed to fetch country data' });
   });
 });

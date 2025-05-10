@@ -59,7 +59,7 @@ class CountryModel {
       const country = response.data.find(c => c.name.common.toLowerCase() === name.toLowerCase());
 
       if (!country) {
-        throw new Error('Country not found');
+        throw new Error('Failed to fetch country data');
       }
 
       const formattedCountry = {
@@ -76,7 +76,6 @@ class CountryModel {
 
       return formattedCountry;
     } catch (error) {
-      console.error('Error fetching country:', error.message);
       throw new Error('Failed to fetch country data');
     }
   }
