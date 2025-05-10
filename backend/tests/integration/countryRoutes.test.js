@@ -1,5 +1,4 @@
 const request = require('supertest');
-const mongoose = require('mongoose');
 const { app, server } = require('../../app');
 
 describe('Country Routes', () => {
@@ -43,6 +42,6 @@ describe('Country Routes', () => {
   test('GET /countries/Invalid should return 404 for unknown country', async () => {
     const response = await request(app).get('/countries/Invalid');
     expect(response.status).toBe(404);
-    expect(response.body).toEqual({ error: 'Failed to fetch country data' });
+    expect(res.json).toHaveBeenCalledWith({ error: 'Country not found' });
   });
 });
