@@ -24,11 +24,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm 
+        run: npm install
 
       - name: Run backend tests
         run: npm test
@@ -73,11 +73,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm
+        run: npm install
+
 
       - name: Run frontend tests
         run: npm test
