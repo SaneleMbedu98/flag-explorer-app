@@ -25,10 +25,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
-          cache: 'npm' # Cache Node modules for speed
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci # Fast and deterministic installs
+        run: npm 
 
       - name: Run backend tests
         run: npm test
