@@ -25,21 +25,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
+          cache: 'npm' # Cache Node modules for speed
 
       - name: Install dependencies
-        run: npm ci  # Use npm ci for faster, deterministic installs
+        run: npm ci # Fast and deterministic installs
 
       - name: Run backend tests
-        run: npm test -- --detectOpenHandles
+        run: npm test
         env:
-          # Add environment variables if needed for tests (e.g., API keys)
           NODE_ENV: test
 
       - name: Build backend
         run: npm run build
-        if: success()  # Only run if tests pass
+        if: success()
 
-      - name: Clear cache
+      - name: Cache dependencies
         uses: actions/cache@v4
         with:
           path: ~/.npm
@@ -58,7 +58,7 @@ jobs:
         with:
           name: backend-artifact
           path: ./backend/backend.tar
-          retention-days: 5  # Retain artifacts for 5 days
+          retention-days: 7 # Retain artifacts longer for better rollback options
         if: success()
 
   frontend:
@@ -74,12 +74,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run frontend tests
-        run: npm test -- --detectOpenHandles
+        run: npm test
         env:
           NODE_ENV: test
 
@@ -91,7 +92,7 @@ jobs:
         run: zip -r frontend-build.zip build/
         if: success()
 
-      - name: Clear cache
+      - name: Cache dependencies
         uses: actions/cache@v4
         with:
           path: ~/.npm
@@ -112,5 +113,5 @@ jobs:
           path: |
             ./frontend/frontend-build.zip
             ./frontend/frontend.tar
-          retention-days: 5
+          retention-days: 7 # Increased retention for rollback stability
         if: success()
