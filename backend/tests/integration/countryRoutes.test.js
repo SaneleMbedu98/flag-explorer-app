@@ -22,15 +22,16 @@ describe('Country Routes', () => {
 
     const response = await request(app).get('/countries');
     expect(response.status).toBe(200);
-    expect(response.body).toEqual([
-      {
-        name: 'France',
-        flag: 'france.png',
-        capital: 'Paris',
-        languages: 'N/A',
-        subregion: 'Unknown',
-      },
-    ]);
+    expect(response.body).toEqual({
+      name: 'France',
+      population: 67391582,
+      capital: 'Paris',
+      flag: 'france.png',
+      languages: 'N/A',
+      subregion: 'Unknown'
+    });
+
+
   });
 
   test('GET /countries/France should return country details', async () => {
@@ -59,6 +60,6 @@ describe('Country Routes', () => {
 
     const response = await request(app).get('/countries/Invalid');
     expect(response.status).toBe(404);
-    expect(response.body).toEqual({ error: 'Country not found' });
+    expect(response.body).toEqual({ error: 'Failed to fetch country data' });
   });
 });

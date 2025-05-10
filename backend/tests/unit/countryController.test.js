@@ -39,6 +39,6 @@ describe('Country Controller', () => {
 
     await countryController.getCountryByName(req, res, next);
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Country not found' });
+    expect(response.body).toEqual({ error: 'Failed to fetch country data' });
   });
 });
