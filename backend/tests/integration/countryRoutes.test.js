@@ -23,7 +23,13 @@ describe('Country Routes', () => {
     const response = await request(app).get('/countries');
     expect(response.status).toBe(200);
     expect(response.body).toEqual([
-      { name: 'France', flag: 'france.png', capital: 'Paris' }
+      {
+        name: 'France',
+        flag: 'france.png',
+        capital: 'Paris',
+        languages: 'N/A',
+        subregion: 'Unknown',
+      },
     ]);
   });
 
