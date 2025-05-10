@@ -30,7 +30,7 @@ jobs:
         run: npm ci  # Use npm ci for faster, deterministic installs
 
       - name: Run backend tests
-        run: npm test
+        run: npm test -- --detectOpenHandles
         env:
           # Add environment variables if needed for tests (e.g., API keys)
           NODE_ENV: test
@@ -79,7 +79,7 @@ jobs:
         run: npm ci
 
       - name: Run frontend tests
-        run: npm test
+        run: npm test -- --detectOpenHandles
         env:
           NODE_ENV: test
 
