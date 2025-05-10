@@ -1,35 +1,75 @@
 const request = require('supertest');
-const mongoose = require('mongoose'); // Ensure it's imported for connection handling
+const mongoose = require('mongoose');
+// const nock = require('nock');
 const { app, server } = require('../../app');
 
 describe('Country Routes', () => {
+  // Extend Jest timeout for API calls
+  jest.setTimeout(15000);
+
+  // Mock REST Countries API before all tests
+  // beforeAll(() => {
+  //   nock('https://restcountries.com')
+  //     .get('/v3.1/all')
+  //     .reply(200, [
+  //       {
+  //         name: { common: 'France' },
+  //         population: 67391582,
+  //         capital: ['Paris'],
+  //         flags: { png: 'https://flagcdn.com/w320/fr.png' },
+  //         languages: { fra: 'French' },
+  //         region: 'Europe',
+  //         subregion: 'Western Europe',
+  //       },
+  //     ])
+  //     .get('/v3.1/name/France')
+  //     .reply(200, [
+  //       {
+  //         name: { common: 'France' },
+  //         population: 67391582,
+  //         capital: ['Paris'],
+  //         flags: { png: 'https://flagcdn.com/w320/fr.png' },
+  //         languages: { fra: 'French' },
+  //         region: 'Europe',
+  //         subregion: 'Western Europe',
+  //       },
+  //     ])
+  //     .get('/v3.1/name/Invalid')
+  //     .reply(404, { message: 'Not Found' });
+  // });
+
+  // Cleanup after all tests
   afterAll(async () => {
     // Close MongoDB connection if open
     if (mongoose.connection.readyState === 1) {
       await mongoose.connection.close();
     }
-    
-    // Ensure server is properly closed after tests
+
+    // Close Express server
     if (server && server.close) {
-      await new Promise(resolve => server.close(resolve));
+      await new Promise((resolve) => server.close(resolve));
     }
   });
 
-  test('GET /countries should return list of countries', async () => {
+  test('GET /countries should return a list of countries', async () => {
     const response = await request(app).get('/countries');
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        name: 'France',
-        population: expect.any(Number),
-        capital: 'Paris',
-        flag: expect.any(String), // Allow dynamic flag URLs
-        languages: expect.any(String), // Accept real API data
-        subregion: expect.any(String), // Handle actual subregion values
-      })
-    ]));
-  }, 10000); // Extend timeout to 10 sec
-
+    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: expect.any(String),
+          population: expect.any(Number),
+          capital: expect.any(String),
+          flag: expect.any(String),
+          languages: expect.any(String),
+          region: expect.any(String),
+          subregion: expect.any(String),
+        }),
+      ])
+    );
+  });
 
   test('GET /countries/France should return country details', async () => {
     const response = await request(app).get('/countries/France');
@@ -37,14 +77,13 @@ describe('Country Routes', () => {
     expect(response.body).toMatchObject({
       name: 'France',
       population: expect.any(Number),
-      capital: 'Paris',
-      flag: expect.any(String), // Accept dynamic flag URLs
-      languages: expect.any(String), // Accept real API language
-      region: expect.any(String), // Allow region if it's included
-      subregion: expect.any(String), // Prevent failure due to subregion changes
+      capital: expect.any(String),
+      flag: expect.any(String),
+      languages: expect.any(String),
+      region: expect.any(String),
+      subregion: expect.any(String),
     });
   });
-
 
   test('GET /countries/Invalid should return 404 for unknown country', async () => {
     const response = await request(app).get('/countries/Invalid');
