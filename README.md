@@ -1,4 +1,3 @@
-
 # Flag Explorer App
 
 Welcome to the  **Flag Explorer App** , a web application that allows users to explore and learn about flags from different countries. This project is built with a Node.js backend and a React frontend, containerized using Docker for easy deployment.
@@ -44,7 +43,7 @@ If you prefer to run the containers individually:
 ```bash
 cd backend
 docker build -t flag-explorer-backend:latest .
-docker run -d -p 3000:3000 --name flag-explorer-backend flag-explorer-backend:latest
+docker run -d -p 5000:5000 --name flag-explorer-backend flag-explorer-backend:latest
 ```
 
  **Frontend** :
@@ -52,19 +51,19 @@ docker run -d -p 3000:3000 --name flag-explorer-backend flag-explorer-backend:la
 ```bash
 cd frontend
 docker build -t flag-explorer-frontend:latest .
-docker run -d -p 5000:5000 --name flag-explorer-frontend flag-explorer-frontend:latest
+docker run -d -p 3000:3000 --name flag-explorer-frontend flag-explorer-frontend:latest
 ```
 
 ### 3. Access the Application
 
 Once the containers are running, you can access the Flag Explorer App at the following URL:
 
-* **URL** : `http://localhost:5000`
+* **URL** : `http://localhost:3000`
 * **Ports** :
-* Frontend: `5000` (mapped to the container's port 5000)
-* Backend: `3000` (mapped to the container's port 3000, used for API requests)
+* Frontend: `3000` (mapped to the container's port 3000)
+* Backend: `5000` (mapped to the container's port 5000, used for API requests)
 
-Open your browser and navigate to `http://localhost:5000` to start exploring flags!
+Open your browser and navigate to `http://localhost:3000()`
 
 ### 4. Stopping the Application
 
@@ -168,7 +167,7 @@ flag-explorer-app/
 
 ## Troubleshooting
 
-* **Port Conflicts** : If ports `3000` or `5000` are already in use, modify the host port in the `docker run` command (e.g., `-p 8081:5000`) or in `docker-compose.yml`.
+* **Port Conflicts** : If ports `5000` or `3000` are already in use, modify the host port in the `docker run` command (e.g., `-p 8081:3000`) or in `docker-compose.yml`.
 * **Docker Issues** : Ensure Docker is running and you have sufficient permissions (e.g., run Docker commands with `sudo` on Linux if needed).
 * **Application Errors** : Check container logs for debugging:
 
@@ -189,7 +188,7 @@ This project is licensed under the MIT License. See the [LICENSE](https://grok.c
 
 ### CORS Issues
 
-During development, Cross-Origin Resource Sharing (CORS) issues arose when the frontend (`http://localhost:5000`) made requests to the backend (`http://localhost:3000`). Browser errors indicated missing `Access-Control-Allow-Origin` headers.
+During development, Cross-Origin Resource Sharing (CORS) issues arose when the frontend (`http://localhost:3000`) made requests to the backend (`http://localhost:5000`). Browser errors indicated missing `Access-Control-Allow-Origin` headers.
 
 #### Solutions Implemented
 
@@ -197,7 +196,7 @@ During development, Cross-Origin Resource Sharing (CORS) issues arose when the f
 
 ```javascript
   const cors = require('cors');
-  app.use(cors({ origin: 'http://localhost:5000', credentials: true }));
+  app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 ```
 
   In production, the origin was updated to the deployed frontend URL.
@@ -206,7 +205,7 @@ During development, Cross-Origin Resource Sharing (CORS) issues arose when the f
 * **Proxy in Development** : Configured a proxy in the frontend's `package.json`:
 
 ```json
-  "proxy": "http://localhost:3000"
+  "proxy": "http://localhost:5000"
 ```
 
 #### Lessons Learned
