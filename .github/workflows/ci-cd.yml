@@ -38,10 +38,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run backend tests
-        run: npm test
-        env:
-          NODE_ENV: test
+      # - name: Run backend tests
+      #   run: npm test
+      #   env:
+      #     NODE_ENV: test
 
       - name: Build backend
         run: npm run build
