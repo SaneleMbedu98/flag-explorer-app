@@ -4,7 +4,7 @@ const { app } = require('../../app'); // Do NOT import the server directly
 let server;
 
 beforeAll((done) => {
-  server = app.listen(4000, () => {
+  server = app.listen(0, () => {
     console.log('✅ Test server running on port 4000');
     done();
   });
