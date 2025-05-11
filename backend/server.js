@@ -1,26 +1,52 @@
-const request = require('supertest');
-const app = require('../../app'); // Path to your Express app
-let server;
+const express = require('express');
+const cors = require('cors');
+const countryRoutes = require('./routes/countryRoutes');
+const CountryModel = require('./models/countryModel');
 
-beforeAll((done) => {
-  const PORT = process.env.PORT || 0;
-  server = app.listen(PORT, () => {
-    console.log(`🚀 Test server running on port ${PORT}`);
-    done();
-  });
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware setup
+app.use(express.json());
+app.use(cors());
+
+// Root route - Returns all countries
+app.get('/', async (req, res, next) => {
+  try {
+    const countries = await CountryModel.getAllCountries();
+    if (!countries || countries.length === 0) {
+      return res.status(404).json({ error: 'No countries found' });
+    }
+    res.status(200).json(countries);
+  } catch (error) {
+    console.error('Error fetching country data:', error.message);
+    next(error);
+  }
 });
 
-afterAll((done) => {
-  server.close(() => {
-    console.log('✅ Test server closed');
-    done();
-  });
+// Country API routes
+app.use('/countries', countryRoutes);
+
+// Global error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err.stack);
+  res.status(err.status || 500).json({ error: err.message || 'Something went wrong!' });
 });
 
-describe('Country Routes', () => {
-  it('GET /countries should return a list of countries', async () => {
-    const res = await request(app).get('/countries');
-    expect(res.statusCode).toEqual(200);
-    expect(Array.isArray(res.body)).toBeTruthy();
-  });
+// Start the server
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running inside Docker on port ${PORT}`);
 });
+
+// Handle Docker container graceful shutdown
+const shutdown = async () => {
+  console.log('🛑 Shutting down server...');
+  if (server) await new Promise(resolve => server.close(resolve));
+  process.exit(0);
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
+
+// Export app and server for testing
+module.exports = { app, server };
