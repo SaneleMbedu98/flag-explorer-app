@@ -52,19 +52,19 @@ docker run -d -p 3000:3000 --name flag-explorer-backend flag-explorer-backend:la
 ```bash
 cd frontend
 docker build -t flag-explorer-frontend:latest .
-docker run -d -p 8080:8080 --name flag-explorer-frontend flag-explorer-frontend:latest
+docker run -d -p 5000:5000 --name flag-explorer-frontend flag-explorer-frontend:latest
 ```
 
 ### 3. Access the Application
 
 Once the containers are running, you can access the Flag Explorer App at the following URL:
 
-* **URL** : `http://localhost:8080`
+* **URL** : `http://localhost:5000`
 * **Ports** :
-* Frontend: `8080` (mapped to the container's port 8080)
+* Frontend: `5000` (mapped to the container's port 5000)
 * Backend: `3000` (mapped to the container's port 3000, used for API requests)
 
-Open your browser and navigate to `http://localhost:8080` to start exploring flags!
+Open your browser and navigate to `http://localhost:5000` to start exploring flags!
 
 ### 4. Stopping the Application
 
@@ -168,7 +168,7 @@ flag-explorer-app/
 
 ## Troubleshooting
 
-* **Port Conflicts** : If ports `3000` or `8080` are already in use, modify the host port in the `docker run` command (e.g., `-p 8081:8080`) or in `docker-compose.yml`.
+* **Port Conflicts** : If ports `3000` or `5000` are already in use, modify the host port in the `docker run` command (e.g., `-p 8081:5000`) or in `docker-compose.yml`.
 * **Docker Issues** : Ensure Docker is running and you have sufficient permissions (e.g., run Docker commands with `sudo` on Linux if needed).
 * **Application Errors** : Check container logs for debugging:
 
@@ -189,7 +189,7 @@ This project is licensed under the MIT License. See the [LICENSE](https://grok.c
 
 ### CORS Issues
 
-During development, Cross-Origin Resource Sharing (CORS) issues arose when the frontend (`http://localhost:8080`) made requests to the backend (`http://localhost:3000`). Browser errors indicated missing `Access-Control-Allow-Origin` headers.
+During development, Cross-Origin Resource Sharing (CORS) issues arose when the frontend (`http://localhost:5000`) made requests to the backend (`http://localhost:3000`). Browser errors indicated missing `Access-Control-Allow-Origin` headers.
 
 #### Solutions Implemented
 
@@ -197,7 +197,7 @@ During development, Cross-Origin Resource Sharing (CORS) issues arose when the f
 
 ```javascript
   const cors = require('cors');
-  app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
+  app.use(cors({ origin: 'http://localhost:5000', credentials: true }));
 ```
 
   In production, the origin was updated to the deployed frontend URL.
