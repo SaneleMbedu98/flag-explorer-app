@@ -6,7 +6,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://restcountries.com/v3.1/all')
+    fetch('https://flag-explorer-app.onrender.com/')
       .then(response => response.json())
       .then(data => {
         const formattedCountries = data.map(country => ({
