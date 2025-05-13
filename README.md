@@ -1,17 +1,17 @@
+
 # Flag Explorer App
 
-Welcome to the  **Flag Explorer App** , a web application that allows users to explore and learn about flags from different countries. This project is built with a Node.js backend and a React frontend, containerized using Docker for easy deployment.
+Welcome to the  **Flag Explorer App** , a web application for exploring and learning about country flags. Built with a **Node.js** backend and **React** frontend, it’s containerized using **Docker** for seamless deployment. Both services are deployed on Render:
+
+* **Frontend** : [https://sanemembedu.onrender.com/](https://sanemembedu.onrender.com/)
+* **Backend** : [https://flag-explorer-app.onrender.com/](https://flag-explorer-app.onrender.com/)
 
 ## Prerequisites
-
-To run this application, you need the following installed on your system:
 
 * [Docker](https://www.docker.com/get-started)
 * [Docker Compose](https://docs.docker.com/compose/install/) (optional, for multi-container setup)
 
 ## Getting Started
-
-Follow these steps to set up and run the Flag Explorer App using Docker.
 
 ### 1. Clone the Repository
 
@@ -22,21 +22,15 @@ cd flag-explorer-app
 
 ### 2. Build and Run with Docker
 
-The application consists of a backend and frontend, both containerized. Use the following commands to build and run the containers:
-
 #### Option 1: Using Docker Compose (Recommended)
-
-If a `docker-compose.yml` file is provided in the repository, you can run both services with a single command:
 
 ```bash
 docker-compose up --build
 ```
 
-This will build and start the backend and frontend containers, automatically configuring networking between them.
+This builds and starts both backend and frontend containers with automatic networking.
 
 #### Option 2: Manual Docker Commands
-
-If you prefer to run the containers individually:
 
  **Backend** :
 
@@ -56,204 +50,144 @@ docker run -d -p 3000:3000 --name flag-explorer-frontend flag-explorer-frontend:
 
 ### 3. Access the Application
 
-Once the containers are running, you can access the Flag Explorer App at the following URL:
-
-* **URL** : `http://localhost:3000`
+* **URL** : [http://localhost:3000](http://localhost:3000/)
 * **Ports** :
-* Frontend: `3000` (mapped to the container's port 3000)
-* Backend: `5000` (mapped to the container's port 5000, used for API requests)
-
-Open your browser and navigate to `http://localhost:3000()`
+* Frontend: `3000`
+* Backend: `5000` (for API requests)
 
 ### 4. Stopping the Application
 
-To stop the running containers:
-
-#### With Docker Compose:
+ **With Docker Compose** :
 
 ```bash
 docker-compose down
 ```
 
-#### Manually:
+ **Manually** :
 
 ```bash
-docker stop flag-explorer-backend
-docker stop flag-explorer-frontend
-docker rm flag-explorer-backend
-docker rm flag-explorer-frontend
+docker stop flag-explorer-backend flag-explorer-frontend
+docker rm flag-explorer-backend flag-explorer-frontend
 ```
 
 ## Directory Structure
 
-The project is organized into distinct directories for the backend, frontend, and supporting files. Below is a detailed breakdown of the directory structure:
-
 ```
 flag-explorer-app/
-├── .github/
-│   └── workflows/
-│       └── ci.yml              # GitHub Actions YAML file for CI/CD pipeline (runs tests, builds, and packages app)
+├── .github/workflows/ci.yml        # CI/CD pipeline
 ├── backend/
 │   ├── src/
-│   │   ├── controllers/
-│   │   │   └── countryController.js  # Handles API logic for /countries and /countries/:name endpoints
-│   │   ├── routes/
-│   │   │   └── countryRoutes.js     # Defines API routes for country endpoints
-│   │   ├── services/
-│   │   │   └── countryService.js    # Fetches data from REST Countries API or cache
-│   │   ├── models/
-│   │   │   └── cache.js            # Optional: Schema for caching country data (e.g., Redis or MongoDB)
-│   │   └── utils/
-│   │       └── api.js              # Helper functions for API requests and error handling
-│   ├── tests/
-│   │   ├── unit/
-│   │   │   └── countryController.test.js  # Unit tests for controller logic
-│   │   └── integration/
-│   │       └── countryRoutes.test.js      # Integration tests for API endpoints
-│   ├── .env                        # Environment variables (e.g., API_URL, PORT)
-│   ├── .dockerignore               # Files to exclude from Docker build (e.g., node_modules)
-│   ├── Dockerfile                  # Docker configuration for backend container
-│   ├── package.json                # Backend dependencies and scripts
-│   ├── server.js                   # Entry point for Express server
-│   └── swagger.yaml                # Swagger documentation for API (/countries, /countries/:name)
+│   │   ├── controllers/countryController.js  # API logic
+│   │   ├── routes/countryRoutes.js           # API routes
+│   │   ├── services/countryService.js        # Data fetching
+│   │   ├── models/cache.js                   # Caching schema
+│   │   └── utils/api.js                     # API helpers
+│   ├── tests/                              # Unit & integration tests
+│   ├── .env                                # Env variables
+│   ├── .dockerignore                       # Docker exclusions
+│   ├── Dockerfile                          # Backend container
+│   ├── package.json                        # Dependencies
+│   ├── server.js                           # Express server
+│   └── swagger.yaml                        # API documentation
 ├── frontend/
-│   ├── public/
-│   │   ├── index.html              # HTML template for React app
-│   │   └── favicon.ico             # App favicon
+│   ├── public/index.html                   # React template
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── FlagGrid.js         # Component for flag grid on Home Screen
-│   │   │   ├── FlagCard.js         # Component for individual flag display
-│   │   │   └── CountryDetails.js   # Component for Detail Screen
+│   │   │   ├── FlagGrid.js                 # Flag grid
+│   │   │   ├── FlagCard.js                 # Flag display
+│   │   │   └── CountryDetails.js           # Country details
 │   │   ├── pages/
-│   │   │   ├── Home.js             # Home Screen page
-│   │   │   └── Details.js          # Detail Screen page
-│   │   ├── services/
-│   │   │   └── api.js              # API client for backend requests
-│   │   ├── styles/
-│   │   │   └── tailwind.css        # Tailwind CSS or custom styles
-│   │   ├── App.js                  # Main React app component
-│   │   ├── index.js                # React entry point
-│   │   └── tests/
-│   │       ├── FlagGrid.test.js    # Unit tests for FlagGrid component
-│   │       └── api.test.js         # Integration tests for API calls
-│   ├── .env                        # Environment variables (e.g., REACT_APP_API_URL)
-│   ├── .dockerignore               # Files to exclude from Docker build
-│   ├── Dockerfile                  # Docker configuration for frontend container
-│   ├── package.json                # Frontend dependencies and scripts
-│   └── tailwind.config.js          # Tailwind CSS configuration
-├── .dockerignore                   # Root-level Docker ignore file
-├── .gitignore                      # Git ignore file (e.g., ignores node_modules, .env)
-├── docker-compose.yml              # Docker Compose configuration for multi-container setup
-├── LICENSE                         # MIT License file
-└── README.md                       # This README file
+│   │   │   ├── Home.js                     # Home page
+│   │   │   └── Details.js                  # Detail page
+│   │   ├── services/api.js                 # API client
+│   │   ├── styles/tailwind.css             # Styles
+│   │   ├── App.js                          # Main app
+│   │   └── tests/                          # Frontend tests
+│   ├── .env                                # Env variables
+│   ├── .dockerignore                       # Docker exclusions
+│   ├── Dockerfile                          # Frontend container
+│   ├── package.json                        # Dependencies
+│   └── tailwind.config.js                  # Tailwind config
+├── .dockerignore                           # Root exclusions
+├── .gitignore                              # Git exclusions
+├── docker-compose.yml                      # Multi-container config
+├── LICENSE                                 # MIT License
+└── README.md                               # Documentation
 ```
-
-### Directory Descriptions
-
-* **`.github/workflows/ci.yml`** : Defines the CI/CD pipeline using GitHub Actions to run tests, build the application, and package artifacts for deployment.
-* **`backend/`** : Contains the Node.js/Express backend implementing the REST API.
-* `src/`: Core backend code, organized using MVC architecture.
-* `tests/`: Unit and integration tests using Jest and Supertest.
-* `Dockerfile`: Configures the backend container with Node.js and dependencies.
-* `swagger.yaml`: Documents the API endpoints per the provided Swagger spec.
-* **`frontend/`** : Contains the React frontend for the flag explorer UI.
-* `public/`: Static assets for the React app.
-* `src/`: React components, pages, services, and tests.
-* `Dockerfile`: Configures the frontend container with Node.js and Nginx for serving the built app.
-* **`docker-compose.yml`** : Orchestrates the backend and frontend containers, defining services, ports, and networking.
-* **`.gitignore`** : Excludes unnecessary files (e.g., `node_modules`, `.env`, build artifacts) from version control.
-* **`LICENSE`** : Specifies the MIT License for the project.
 
 ## Troubleshooting
 
-* **Port Conflicts** : If ports `5000` or `3000` are already in use, modify the host port in the `docker run` command (e.g., `-p 8081:3000`) or in `docker-compose.yml`.
-* **Docker Issues** : Ensure Docker is running and you have sufficient permissions (e.g., run Docker commands with `sudo` on Linux if needed).
-* **Application Errors** : Check container logs for debugging:
-
-```bash
-docker logs flag-explorer-backend
-docker logs flag-explorer-frontend
-```
+* **Port Conflicts** : Change ports in `docker run` (e.g., `-p 8081:3000`) or `docker-compose.yml`.
+* **Docker Issues** : Ensure Docker is running; use `sudo` on Linux if needed.
+* **Logs** : Check with `docker logs flag-explorer-backend` or `docker logs flag-explorer-frontend`.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request with your changes. Ensure your code passes tests and follows the project's coding standards.
+Fork the repo, create a branch, and submit a pull request. Ensure tests pass and follow coding standards.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://grok.com/chat/LICENSE) file for details.
+MIT License. See [LICENSE](https://grok.com/chat/LICENSE).
 
-## Other Important Information and Challenges
+## Challenges
 
 ### CORS Issues
 
-During development, Cross-Origin Resource Sharing (CORS) issues arose when the frontend (`http://localhost:3000`) made requests to the backend (`http://localhost:5000`). Browser errors indicated missing `Access-Control-Allow-Origin` headers.
+ **Problem** : Browser errors due to missing `Access-Control-Allow-Origin` headers.
 
-#### Solutions Implemented
+ **Solutions** :
 
-* **Backend CORS Middleware** : Added CORS to the Express server:
-
-```javascript
-  const cors = require('cors');
+* Added CORS middleware in Express:
+  ```javascript
   app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-```
-
-  In production, the origin was updated to the deployed frontend URL.
-
-* **Docker Networking** : Used Docker Compose to place frontend and backend in the same network, simplifying communication.
-* **Proxy in Development** : Configured a proxy in the frontend's `package.json`:
-
-```json
+  ```
+* Used Docker Compose for networking.
+* Added proxy in frontend `package.json`:
+  ```json
   "proxy": "http://localhost:5000"
-```
+  ```
 
-#### Lessons Learned
+ **Lessons** :
 
-* Explicitly define allowed origins for security.
-* Test CORS configurations early to avoid deployment issues.
-* Use Docker networking to streamline local development.
+* Define origins for security.
+* Test CORS early.
+* Use Docker networking for local dev.
 
 ### Backend Testing Problems
 
-Testing the backend presented challenges, particularly with external API dependencies and asynchronous operations.
+ **Issues** :
 
-#### Issues Faced
+* REST Countries API latency/rate limits caused test inconsistencies.
+* Async test failures.
+* Inconsistent `.env` settings.
 
-* **External API Variability** : The REST Countries API (`https://restcountries.com/v3.1/all`) introduced latency and rate limits, causing test inconsistencies.
-* **Async Handling** : Supertest tests failed due to unhandled asynchronous calls.
-* **Environment Variables** : Tests required consistent `.env` settings.
+ **Solutions** :
 
-#### Solutions Implemented
-
-* **Mocking with Nock** : Mocked REST Countries API responses:
-
-```javascript
-  const nock = require('nock');
+* Mocked API with Nock:
+  ```javascript
   nock('https://restcountries.com').get('/v3.1/all').reply(200, [{ name: { common: 'Test' }, flags: { png: 'flag.png' } }]);
-```
-
-* **Async Tests** : Used `async/await` in Supertest:
-
-```javascript
-  const request = require('supertest');
-  describe('GET /countries', () => {
-    it('returns countries', async () => {
-      const res = await request(app).get('/countries');
-      expect(res.status).toBe(200);
-    });
+  ```
+* Used `async/await` in Supertest:
+  ```javascript
+  it('returns countries', async () => {
+    const res = await request(app).get('/countries');
+    expect(res.status).toBe(200);
   });
-```
+  ```
+* Used `.env.test` for test settings.
 
-* **Test Environment** : Used `.env.test` for test-specific variables.
+ **Lessons** :
 
-#### Lessons Learned
-
-* Mock external APIs to ensure reliable tests.
-* Configure test environments to mirror production settings.
+* Mock external APIs.
+* Mirror production in test environments.
 
 ### Other Challenges
 
-* **API Rate Limits** : Cached API responses in the backend (using Redis or in-memory storage) to handle REST Countries API limits.
-* **Docker Image Size** : Optimized Dockerfiles to reduce image size (e.g., multi-stage builds).
-* **Performance** : Implemented lazy loading for flag images to improve frontend performance.
+* **API Rate Limits** : Cached responses with Redis/in-memory storage.
+* **Docker Image Size** : Used multi-stage builds.
+* **Performance** : Added lazy loading for flag images.
+
+Both services are live on Render:
+
+* **Frontend** : [https://sanemembedu.onrender.com/](https://sanemembedu.onrender.com/)
+* **Backend** : [https://flag-explorer-app.onrender.com/](https://flag-explorer-app.onrender.com/)
