@@ -12,8 +12,11 @@ exports.getAllCountries = async (req, res, next) => {
 exports.getCountryByName = async (req, res, next) => {
   try {
     const country = await CountryModel.getCountryByName(req.params.name);
+    if (!country) {
+      return res.status(404).json({ error: 'Country not found' });
+    }
     res.status(200).json(country);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    next(error);
   }
 };
