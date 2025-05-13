@@ -14,7 +14,7 @@ function Details() {
     }
 
     //fetch(`https://flag-explorer-app.onrender.com/countries/${name}`)
-    fetch(`https://flag-explorer-app.onrender.com/country/${name}`)
+    fetch(`https://flag-explorer-app.onrender.com/countries/${encodeURIComponent(name)}`)
       .then(response => {
         if (!response.ok) throw new Error('Country not found');
         return response.json();
